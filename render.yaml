@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: yt2mp3-api
+    env: docker
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /healthz
