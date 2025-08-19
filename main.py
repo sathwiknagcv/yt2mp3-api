@@ -29,12 +29,22 @@ def yt2mp3(job: Job, x_api_key: str = Header(default=None)):
             "outtmpl": f"{tmp}/%(id)s.%(ext)s",
             "noplaylist": True,
             "quiet": True,
+        
+            # --- important tweaks to avoid the consent/bot page ---
+            "extractor_args": {"youtube": {"player_client": ["android"]}},  # try mobile client
+            "http_headers": {
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/117.0",
+                "Accept-Language": "en-US,en;q=0.5",
+            },
+            # -------------------------------------------------------
+        
             "postprocessors": [{
                 "key": "FFmpegExtractAudio",
                 "preferredcodec": "mp3",
                 "preferredquality": "192",
             }],
         }
+
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 info = ydl.extract_info(url, download=True)
